@@ -28,6 +28,7 @@ export function NodePropertyGrid({ node }) {
           src={`${process.env.NEXT_PUBLIC_DRUPAL_BASE_URL}${thumbnail.uri.url}`}
           width={360}
           height={240}
+          alt={node.field_image.alt || 'image description'}
           layout="responsive"
           objectFit="cover"
         />
@@ -84,6 +85,7 @@ export function NodePropertyList({ node }) {
             src={`${process.env.NEXT_PUBLIC_DRUPAL_BASE_URL}${thumbnail.uri.url}`}
             width={310}
             height={310}
+            alt={node.field_image.alt || 'Image description'}
             layout="responsive"
             objectFit="cover"
             className="rounded-lg"

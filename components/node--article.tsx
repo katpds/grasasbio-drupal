@@ -40,6 +40,7 @@ export function NodeArticleFull({ node, ...props }) {
               src={absoluteURL(node.field_image.uri.url)}
               width={1200}
               height={600}
+              alt={node.field_image.alt || "Image description."}
               layout="intrinsic"
               objectFit="cover"
               className="rounded-lg"
@@ -63,6 +64,7 @@ export function NodeArticleTeaser({ node, ...props }) {
             src={absoluteURL(node.field_image.uri.url)}
             width={800}
             height={450}
+            alt={node.field_image.alt || "Image decription"}
             layout="intrinsic"
             objectFit="cover"
             className="rounded-lg"

@@ -1,23 +1,24 @@
 import Image from "next/image"
-import { HTMLReactParserOptions, domToReact } from "html-react-parser"
-import { Element } from "domhandler/lib/node"
+import { HTMLReactParserOptions, domToReact, DOMNode } from "html-react-parser"
+import { Element } from "domhandler"
 import parse from "html-react-parser"
 
 import { isRelative } from "lib/utils/is-relative"
 import Link from "next/link"
+import { absoluteURL } from "lib/utils/absolute-url"
 
 const options: HTMLReactParserOptions = {
   replace: (domNode) => {
     if (domNode instanceof Element) {
       if (domNode.name === "img") {
-        const { src, alt, width = "100px", height = "100px" } = domNode.attribs
+        const { src, alt="Image description", width = "100", height = "100" } = domNode.attribs
 
         if (isRelative(src)) {
           return (
             <Image
               src={`${process.env.NEXT_PUBLIC_DRUPAL_BASE_URL}/${src}`}
-              width={`${width}px`}
-              height={`${height}px`}
+              width={parseInt(width, 10)}
+              height={parseInt(height, 10)}
               alt={alt}
               layout="intrinsic"
               objectFit="cover"
@@ -32,7 +33,7 @@ const options: HTMLReactParserOptions = {
         if (href && isRelative(href)) {
           return (
             <Link href={href} passHref>
-              <a className={className}>{domToReact(domNode.children)}</a>
+              <a className={className}>{domToReact(domNode.children as DOMNode[])}</a>
             </Link>
           )
         }
@@ -62,3 +63,21 @@ export function FormattedText({ processed, ...props }: FormattedTextProps) {
     </div>
   )
 }
+
+const MyComponent = ({ node }) => {
+  return(
+    <>
+    {node.body?.summary ? <p>{node.body.summary}</p>: null}
+    {node.field_image?.uri && (
+      <Image 
+      src={absoluteURL(node.field_image.uri.url)}
+        width={1200}
+        height={600}
+        alt={node.field_image.alt || 'Image description'}
+      />
+    )}
+    </>
+  )
+}
+
+export default MyComponent;
